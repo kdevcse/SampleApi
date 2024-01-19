@@ -7,7 +7,7 @@ using TestApi.Services;
 namespace TestApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController: ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -19,8 +19,8 @@ namespace TestApi.Controllers
             _userService = userService;
         }
 
-        [HttpGet(Name = "GetUser")]
-        public GetUserResponse GetUser(int userId)
+        [HttpGet("{userId}")]
+        public async Task<GetUserResponse> GetUser(int userId)
         {
             var response = new GetUserResponse();
 
@@ -44,8 +44,8 @@ namespace TestApi.Controllers
             return response;
         }
 
-        [HttpGet(Name = "CreateUser")]
-        public CrudUserResponse CreateUser(User user)
+        [HttpPost(Name = "CreateUser")]
+        public async Task<CrudUserResponse> CreateUser(User user)
         {
             try {
                 var createdUserId = _userService.CreateUser(user);
@@ -68,8 +68,8 @@ namespace TestApi.Controllers
             }
         }
 
-        [HttpGet(Name = "UpdateUser")]
-        public CrudUserResponse UpdateUser(User modifiedUser)
+        [HttpPut]
+        public async Task<CrudUserResponse> UpdateUser(User modifiedUser)
         {
             try
             {
@@ -93,8 +93,8 @@ namespace TestApi.Controllers
             }
         }
 
-        [HttpGet(Name = "DeleteUser")]
-        public CrudUserResponse DeleteUser(int userId)
+        [HttpDelete(Name = "DeleteUser")]
+        public async Task<CrudUserResponse> DeleteUser(int userId)
         {
             try
             {
