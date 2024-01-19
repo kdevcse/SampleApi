@@ -19,6 +19,33 @@ namespace TestApi.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        [Route("all")]
+        public async Task<GetUsersResponse> GetUsers()
+        {
+            var response = new GetUsersResponse();
+
+            try
+            {
+                var users = await _userService.GetUsers();
+
+                if (users == null)
+                {
+                    return ApiLoggerHelper.LogError<GetUsersResponse>(_logger, $"Could not retrieve users", "UserController\\GetUsers");
+                }
+
+                response.Users = users;
+                response.StatusCode = StatusCodes.Status200OK;
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response = ApiLoggerHelper.LogError<GetUsersResponse>(_logger, $"Exception {ex.Message}", "UserController\\GetUsers");
+            }
+
+            return response;
+        }
+
         [HttpGet("{userId}")]
         public async Task<GetUserResponse> GetUser(int userId)
         {

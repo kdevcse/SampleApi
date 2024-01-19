@@ -6,10 +6,10 @@ namespace TestApi.Helpers
     {
         public static T LogError<T>(ILogger logger, string errorMsg, string scope)
         {
-            if (typeof(T).IsSubclassOf(typeof(BaseResponse)))
+            /*if (typeof(T).IsSubclassOf(typeof(BaseResponse)))
             {
                 throw new InvalidOperationException($"{typeof(T).FullName} is not of type BaseReponse");
-            }
+            }*/
 
             var response = new BaseResponse
             {

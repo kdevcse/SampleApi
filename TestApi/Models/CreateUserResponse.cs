@@ -11,4 +11,8 @@ namespace TestApi.Models
     {
         public User? User { get; set; }
     }
+    public class GetUsersResponse : BaseResponse
+    {
+        public List<User>? Users { get; set; }
+    }
 }

@@ -6,6 +6,7 @@ namespace TestApi.Services
 {
     public interface IUserService
     {
+        Task<List<User>?> GetUsers();
         Task<User?> GetUser(int userId);
         Task<int?> CreateUser(User user);
         Task<int?> UpdateUser(User modifiedUser);
