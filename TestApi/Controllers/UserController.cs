@@ -26,7 +26,7 @@ namespace TestApi.Controllers
 
             try
             {
-                var user = _userService.GetUser(userId);
+                var user = await _userService.GetUser(userId);
 
                 if (user == null)
                 {
@@ -48,7 +48,7 @@ namespace TestApi.Controllers
         public async Task<CrudUserResponse> CreateUser(User user)
         {
             try {
-                var createdUserId = _userService.CreateUser(user);
+                var createdUserId = await _userService.CreateUser(user);
 
 
                 if (createdUserId == null)
@@ -73,7 +73,7 @@ namespace TestApi.Controllers
         {
             try
             {
-                var updatedUserId = _userService.UpdateUser(modifiedUser);
+                var updatedUserId = await _userService.UpdateUser(modifiedUser);
 
                 if (updatedUserId == null)
                 {
@@ -98,7 +98,7 @@ namespace TestApi.Controllers
         {
             try
             {
-                var deletedUserId = _userService.DeleteUser(userId);
+                var deletedUserId = await _userService.DeleteUser(userId);
 
                 if (deletedUserId == null)
                 {

@@ -1,46 +1,81 @@
-﻿using TestApi.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using TestApi.Contexts;
+using TestApi.Entities;
 
 namespace TestApi.Services
 {
     public interface IUserService
     {
-        User GetUser(int userId);
-        int? CreateUser(User user);
-        int? UpdateUser(User modifiedUser);
-        int? DeleteUser(int userId);
-
+        Task<User?> GetUser(int userId);
+        Task<int?> CreateUser(User user);
+        Task<int?> UpdateUser(User modifiedUser);
+        Task<int?> DeleteUser(int userId);
     };
 
     public class UserService : IUserService
     {
-        public User GetUser(int userId)
+        private UserContext _userContext;
+        public UserService(UserContext userContext) {
+            _userContext = userContext;
+        }
+        public async Task<List<User>?> GetUsers()
         {
-            return new User { 
-                Id = userId,
-                UserName = "TestUser",
-                Password = "Password", 
-                CreateTime = DateTime.Now,
-                IsAdmin = true,
-            };
+            return await _userContext.Users.ToListAsync();
         }
 
-        public int? CreateUser(User user)
+        public async Task<User?> GetUser(int userId)
         {
-            return user.Id;
+            return await _userContext.Users.FindAsync(userId);
         }
 
-        public int? UpdateUser(User modifiedUser)
+        public async Task<int?> CreateUser(User user)
         {
-            var originalUser = GetUser(modifiedUser.Id);
+            try
+            {
+                _userContext.Users.Add(user);
+                await _userContext.SaveChangesAsync();
+                return user.Id;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<int?> UpdateUser(User modifiedUser)
+        {
+            try
+            {
+                _userContext.Entry(modifiedUser).State = EntityState.Modified;
+                await _userContext.SaveChangesAsync();
+            }
+            catch
+            {
+                return null;
+            }
 
             return modifiedUser.Id;
         }
 
-        public int? DeleteUser(int userId)
+        public async Task<int?> DeleteUser(int userId)
         {
-            var user = GetUser(userId);
+            try
+            {
+                var user = await GetUser(userId);
 
-            return user.Id;
+                if (user == null)
+                {
+                    return null;
+                }
+
+                _userContext.Users.Remove(user);
+                await _userContext.SaveChangesAsync();
+                return user.Id;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
